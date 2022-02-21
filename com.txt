@@ -1,0 +1,5 @@
+tas-diff-add-del.db
+.mode csv
+.import 2022.01.18.csv REPORTLINES
+.import 
+.quit
