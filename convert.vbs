@@ -10,4 +10,4 @@ Set oBook = oExcel.Workbooks.Open(Wscript.Arguments.Item(0))
 oBook.SaveAs WScript.Arguments.Item(1), 6
 oBook.Close False
 oExcel.Quit
-WScript.Echo "Done"
+'WScript.Echo "Done"
