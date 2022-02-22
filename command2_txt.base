@@ -1,0 +1,53 @@
+.mode csv
+.open tas-diff-add-del.db
+.headers on
+.output '%REPORTFILECSV%'
+with 
+  cte1 as (    
+    select [PROJID], 'PROJNAME' col, [PROJNAME] val from [%OLDDATE%] union all 
+    select [PROJID], 'STATENUM', [STATENUM] from [%OLDDATE%] union all  
+    select [PROJID], 'FEDNUM', [FEDNUM] from [%OLDDATE%] union all   
+    select [PROJID], 'REGION', [REGION] from [%OLDDATE%] union all 
+    select [PROJID], 'LOCATION', [LOCATION] from [%OLDDATE%] union all   
+    select [PROJID], 'PROJMAN', [PROJMAN] from [%OLDDATE%] union all 
+    select [PROJID], 'PHONENUM', [PHONENUM] from [%OLDDATE%] union all   
+    select [PROJID], 'ANTADVDT', [ANTADVDT] from [%OLDDATE%] union all 
+    select [PROJID], 'DESCRIPTION', [DESCRIPTION] from [%OLDDATE%] union all 
+    select [PROJID], 'ADDLINFO', [ADDLINFO] from [%OLDDATE%] union all 
+    select [PROJID], 'ENGEST', [ENGEST] from [%OLDDATE%]    
+  ),
+  cte2 as (
+    select [PROJID], 'PROJNAME' col, [PROJNAME] val from [%NEWDATE%] union all 
+    select [PROJID], 'STATENUM', [STATENUM] from [%NEWDATE%] union all  
+    select [PROJID], 'FEDNUM', [FEDNUM] from [%NEWDATE%] union all   
+    select [PROJID], 'REGION', [REGION] from [%NEWDATE%] union all 
+    select [PROJID], 'LOCATION', [LOCATION] from [%NEWDATE%] union all   
+    select [PROJID], 'PROJMAN', [PROJMAN] from [%NEWDATE%] union all 
+    select [PROJID], 'PHONENUM', [PHONENUM] from [%NEWDATE%] union all   
+    select [PROJID], 'ANTADVDT', [ANTADVDT] from [%NEWDATE%] union all 
+    select [PROJID], 'DESCRIPTION', [DESCRIPTION] from [%NEWDATE%] union all 
+    select [PROJID], 'ADDLINFO', [ADDLINFO] from [%NEWDATE%] union all 
+    select [PROJID], 'ENGEST', [ENGEST] from [%NEWDATE%]   
+  ) , 
+  cte3 as (
+    select * from [%NEWDATE%]
+  )
+SELECT REGION, '(DELETED)' [Change Field], '' [Orig Value], '' [Updated Value], PROJNAME, LOCATION, ANTADVDT, PROJID, STATENUM, FEDNUM, PROJMAN, PHONENUM,
+DESCRIPTION, ADDLINFO, ENGEST FROM "%OLDDATE%" old WHERE NOT EXISTS ( SELECT 1 FROM "%NEWDATE%" new WHERE new.PROJID = old.PROJID )
+UNION ALL
+SELECT REGION, 'ADDED' [Change Field], '' [Orig Value], '' [Updated Value], PROJNAME, LOCATION, ANTADVDT, PROJID, STATENUM, FEDNUM, PROJMAN, PHONENUM,
+DESCRIPTION, ADDLINFO, ENGEST FROM "%NEWDATE%" new WHERE NOT EXISTS ( SELECT 1 FROM "%OLDDATE%" old WHERE new.PROJID = old.PROJID )
+UNION ALL
+select c3.REGION,
+	   c1.col [Change Field],
+	   c1.val [Orig Value],
+	   c2.val [Updated Value],
+	   c3.PROJNAME, 
+	   c3.LOCATION,
+	   c3.ANTADVDT,
+        c1.[PROJID],
+	   '' STATENUM, '' FEDNUM, '' PROJMAN, '' PHONENUM, '' DESCRIPTION, '' ADDLINFO, '' ENGEST
+from cte1 c1 inner join cte2 c2 inner join cte3 c3
+on c2.[PROJID] = c1.[PROJID] and c2.col = c1.col and c2.val <> c1.val and c1.PROJID = c3.[PROJID]
+order by c3.REGION, c1.col;
+.quit

@@ -1,5 +1,6 @@
-# deprecated
+# THIS IS A SANDBOX FOR CREATING AND TESTING SQL QUERIES
 #
+# deprecated:
 # CREATE TABLE [REPORTLINES] (
 #     REPORTDATE  TEXT,
 #     PROJID      TEXT,
@@ -105,4 +106,5 @@ from cte1 c1 inner join cte2 c2 inner join cte3 c3
 on c2.[PROJID] = c1.[PROJID] and c2.col = c1.col and c2.val <> c1.val and c1.PROJID = c3.[PROJID]
 order by c3.REGION, c2.val 
 
-
+p
+REPORTDATE|PROJID|PROJNAME|STATENUM|FEDNUM|REGION|LOCATION|PROJMAN|PHONENUM|ANTADVDT|DESCRIPTION|ADDLINFO|ENGEST     

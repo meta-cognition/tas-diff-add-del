@@ -1,0 +1,10 @@
+convert.vbs "%OLDFILEXLS%" "%OLDFILECSV%"
+convert.vbs "%NEWFILEXLS%" "%NEWFILECSV%"
+sqlite3.exe tas-diff-add-del.db < command1.txt
+sqlite3.exe tas-diff-add-del.db < command2.txt
+convertback.vbs "%REPORTFILECSV%" "%REPORTFILEXLS%"
+
+del /f "%OLDFILECSV%"
+del /f "%NEWFILECSV%"
+del /f "%REPORTFILECSV%"
+del /f "tas-diff-add-del.db"

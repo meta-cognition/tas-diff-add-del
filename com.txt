@@ -1,5 +1,0 @@
-.open tas-diff-add-del.db
-.mode csv
-.import 2021.12.20.csv 2021.12.20 
-.import 2022.01.18.csv 2022.01.18
-.quit
