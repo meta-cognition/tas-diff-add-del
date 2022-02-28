@@ -1,0 +1,86 @@
+.open tas-diff-add-del.db
+with 
+  cte1 as (    
+    select [PROJID], 'PROJNAME' col, [PROJNAME] val from [%OLDDATE%] union all 
+    select [PROJID], 'STATENUM', [STATENUM] from [%OLDDATE%] union all  
+    select [PROJID], 'FEDNUM', [FEDNUM] from [%OLDDATE%] union all   
+    select [PROJID], 'REGION', [REGION] from [%OLDDATE%] union all 
+    select [PROJID], 'LOCATION', [LOCATION] from [%OLDDATE%] union all   
+    select [PROJID], 'PROJMAN', [PROJMAN] from [%OLDDATE%] union all 
+    select [PROJID], 'PHONENUM', [PHONENUM] from [%OLDDATE%] union all   
+    select [PROJID], 'ANTADVDT', [ANTADVDT] from [%OLDDATE%] union all 
+    select [PROJID], 'DESCRIPTION', [DESCRIPTION] from [%OLDDATE%] union all 
+    select [PROJID], 'ADDLINFO', [ADDLINFO] from [%OLDDATE%] union all 
+    select [PROJID], 'ENGEST', [ENGEST] from [%OLDDATE%]    
+  ),
+  cte2 as (
+    select [PROJID], 'PROJNAME' col, [PROJNAME] val from [%NEWDATE%] union all 
+    select [PROJID], 'STATENUM', [STATENUM] from [%NEWDATE%] union all  
+    select [PROJID], 'FEDNUM', [FEDNUM] from [%NEWDATE%] union all   
+    select [PROJID], 'REGION', [REGION] from [%NEWDATE%] union all 
+    select [PROJID], 'LOCATION', [LOCATION] from [%NEWDATE%] union all   
+    select [PROJID], 'PROJMAN', [PROJMAN] from [%NEWDATE%] union all 
+    select [PROJID], 'PHONENUM', [PHONENUM] from [%NEWDATE%] union all   
+    select [PROJID], 'ANTADVDT', [ANTADVDT] from [%NEWDATE%] union all 
+    select [PROJID], 'DESCRIPTION', [DESCRIPTION] from [%NEWDATE%] union all 
+    select [PROJID], 'ADDLINFO', [ADDLINFO] from [%NEWDATE%] union all 
+    select [PROJID], 'ENGEST', [ENGEST] from [%NEWDATE%]   
+  ) , 
+  cte3 as (
+    select * from [%OLDDATE%]
+  )
+INSERT INTO [HISTORY] SELECT * FROM
+(
+	SELECT 
+		'%OLDDATE%' [DATE], 
+		'(DELETED)' [FIELD],  
+		PROJID,
+		PROJNAME, 
+		STATENUM, 
+		FEDNUM, 
+		REGION, 
+		LOCATION, 
+		PROJMAN,
+		PHONENUM, 
+		ANTADVDT, 
+		DESCRIPTION, 
+		ADDLINFO, 
+		ENGEST 
+	FROM "%OLDDATE%" old WHERE NOT EXISTS ( SELECT 1 FROM "%NEWDATE%" new WHERE new.PROJID = old.PROJID )
+	UNION ALL
+	SELECT
+		'%OLDDATE%' [DATE], 
+		'ADDED' [FIELD],  
+		PROJID,
+		PROJNAME, 
+		STATENUM, 
+		FEDNUM, 
+		REGION, 
+		LOCATION, 
+		PROJMAN,
+		PHONENUM, 
+		ANTADVDT, 
+		DESCRIPTION, 
+		ADDLINFO, 
+		ENGEST 
+	FROM "%NEWDATE%" new WHERE NOT EXISTS ( SELECT 1 FROM "%OLDDATE%" old WHERE new.PROJID = old.PROJID )
+	UNION ALL
+	SELECT
+		'%OLDDATE%' [DATE],
+		c1.col [FIELD],   
+		c3.[PROJID],      
+		c3.[PROJNAME],    
+		c3.[STATENUM],    
+		c3.[FEDNUM],      
+		c3.[REGION],      
+		c3.[LOCATION],    
+		c3.[PROJMAN],
+		c3.[PHONENUM],         
+		c3.[ANTADVDT],    
+		c3.[DESCRIPTION], 
+		c3.[ADDLINFO],    
+		c3.[ENGEST]
+	FROM cte1 c1 inner join cte2 c2 inner join cte3 c3
+	on c2.[PROJID] = c1.[PROJID] and c2.col = c1.col and c2.val <> c1.val and c1.PROJID = c3.[PROJID]
+);
+.quit

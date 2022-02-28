@@ -1,5 +1,54 @@
 .mode csv
 .open tas-diff-add-del.db
+
+CREATE TABLE IF NOT EXISTS [HISTORY] (
+    DATE        TEXT,
+    FIELD       TEXT,
+    PROJID      TEXT,
+    PROJNAME    TEXT,
+    STATENUM    TEXT,
+    FEDNUM      TEXT,
+    REGION      TEXT,
+    LOCATION    TEXT,
+    PROJMAN     TEXT,
+    PHONENUM    TEXT,
+    ANTADVDT    TEXT,
+    DESCRIPTION TEXT,
+    ADDLINFO    TEXT,
+    ENGEST      TEXT,
+    PRIMARY KEY (DATE, FIELD, PROJID)
+);
+
+CREATE TABLE IF NOT EXISTS [%OLDDATE%] (
+    PROJID      TEXT UNIQUE,
+    PROJNAME    TEXT,
+    STATENUM    TEXT,
+    FEDNUM      TEXT,
+    REGION      TEXT,
+    LOCATION    TEXT,
+    PROJMAN     TEXT,
+    PHONENUM    TEXT,
+    ANTADVDT    TEXT,
+    DESCRIPTION TEXT,
+    ADDLINFO    TEXT,
+    ENGEST      TEXT
+);
+
+CREATE TABLE IF NOT EXISTS [%NEWDATE%] (
+    PROJID      TEXT UNIQUE,
+    PROJNAME    TEXT,
+    STATENUM    TEXT,
+    FEDNUM      TEXT,
+    REGION      TEXT,
+    LOCATION    TEXT,
+    PROJMAN     TEXT,
+    PHONENUM    TEXT,
+    ANTADVDT    TEXT,
+    DESCRIPTION TEXT,
+    ADDLINFO    TEXT,
+    ENGEST      TEXT
+);
+
 .import '%OLDfILECSV%' %OLDDATE% 
 .import '%NEWFILECSV%' %NEWDATE%
 .quit
