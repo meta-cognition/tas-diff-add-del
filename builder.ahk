@@ -3,11 +3,11 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-FileSelectFile, old_file_xls, , % A_ScriptDir\sources\, Select the OLD TAS report, *.xls, *.xlsx
+FileSelectFile, old_file_xls, , % A_ScriptDir "\sources\", Select the OLD TAS report, Excel Files (*.xls; *.xlsx)
 if (old_file_xls = "")
 	ExitApp
 
-FileSelectFile, new_file_xls, , % A_ScriptDir\sources\, Select the NEW TAS report, *.xls, *.xlsx
+FileSelectFile, new_file_xls, , % A_ScriptDir "\sources\", Select the NEW TAS report, Excel Files (*.xls; *.xlsx)
 if (new_file_xls = "")
 	ExitApp
 
