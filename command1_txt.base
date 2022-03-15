@@ -1,3 +1,4 @@
+-- this file imports data and creates tables.
 .mode csv
 .open tas-diff-add-del.db
 

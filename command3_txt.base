@@ -27,12 +27,12 @@ with
     select [PROJID], 'ENGEST', [ENGEST] from [%NEWDATE%]   
   ) , 
   cte3 as (
-    select * from [%OLDDATE%]
+    select * from [%NEWDATE%]
   )
 INSERT INTO [HISTORY] SELECT * FROM
 (
 	SELECT 
-		'%OLDDATE%' [DATE], 
+		'%NEWDATE%' [DATE], 
 		'(DELETED)' [FIELD],  
 		PROJID,
 		PROJNAME, 
@@ -49,7 +49,7 @@ INSERT INTO [HISTORY] SELECT * FROM
 	FROM "%OLDDATE%" old WHERE NOT EXISTS ( SELECT 1 FROM "%NEWDATE%" new WHERE new.PROJID = old.PROJID )
 	UNION ALL
 	SELECT
-		'%OLDDATE%' [DATE], 
+		'%NEWDATE%' [DATE], 
 		'ADDED' [FIELD],  
 		PROJID,
 		PROJNAME, 
@@ -66,7 +66,7 @@ INSERT INTO [HISTORY] SELECT * FROM
 	FROM "%NEWDATE%" new WHERE NOT EXISTS ( SELECT 1 FROM "%OLDDATE%" old WHERE new.PROJID = old.PROJID )
 	UNION ALL
 	SELECT
-		'%OLDDATE%' [DATE],
+		'%NEWDATE%' [DATE],
 		c1.col [FIELD],   
 		c3.[PROJID],      
 		c3.[PROJNAME],    
@@ -83,4 +83,4 @@ INSERT INTO [HISTORY] SELECT * FROM
 	FROM cte1 c1 inner join cte2 c2 inner join cte3 c3
 	on c2.[PROJID] = c1.[PROJID] and c2.col = c1.col and c2.val <> c1.val and c1.PROJID = c3.[PROJID]
 );
-.quit
+.quit 

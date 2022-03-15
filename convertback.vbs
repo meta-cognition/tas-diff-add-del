@@ -32,7 +32,7 @@ End With
 With oSheet.Columns("I:M")
     .ColumnWidth = 15
 End With
-With oSheet.Columns("M")
+With oSheet.Columns("N")
     .ColumnWidth = 100
 End With
 With oSheet.Rows("1")
