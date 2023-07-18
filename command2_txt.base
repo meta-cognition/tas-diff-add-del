@@ -34,7 +34,8 @@ WITH -- cte is common table expression
 	cte3 as (
 		select * from [%NEWDATE%]
 	),
-	cte4 AS ( -- cte4 through cte6 are for history field
+	-- cte4 through cte6 are for history field
+	cte4 AS ( 
 		SELECT DATE, FIELD, PROJID FROM HISTORY /* WHERE DATE != '%OLDDATE%' */
 	),
 	cte5 AS (
@@ -42,19 +43,28 @@ WITH -- cte is common table expression
 	),
 	cte6 AS ( -- cte6 is cte4 and cte5 to have values for only for antadvdt changes
 		SELECT * FROM cte4 LEFT JOIN cte5 USING (DATE, FIELD, PROJID)
-	) -- end of cte definitions
+	) 
+	-- end of cte definitions
+	-- the below starts to builds the report, or at least the output
 	SELECT 
 		REGION, 
 		'(DELETED)' [CHANGE FIELD], 
-		'' [ORIGINAL VALUE], 
-		'' [UPDATED VALUE], 
+		'' [ORIGINAL VALUE], -- sets blank value and defines column name 
+		'' [UPDATED VALUE],  -- sets blank value and defines column name
+		CAST
+		(
+			(
+				SELECT '(' || COUNT(PROJID) || ')   ' || GROUP_CONCAT( '[on ' || DATE || ' ' || 'the ANTADVDT changed to ' || ANTADVDT || '.]', '; ' )  
+				FROM cte6 WHERE cte6.PROJID = old.PROJID AND FIELD = 'ANTADVDT'
+			) AS TEXT
+		) [DATE HISTORY],
 		CAST
 		(
 			(
 				SELECT '(' || COUNT(PROJID) || ')   ' || GROUP_CONCAT( '[on ' || DATE || ' ' || IIF(FIELD = 'ANTADVDT', 'the ANTADVDT changed to ' || ANTADVDT || '.]', IIF(FIELD = 'ADDED', 'project was added.]', IIF(FIELD = '(DELETED)', 'the project was removed.]', FIELD || ' changed.]'))), '; ' )  
 				FROM cte6 WHERE cte6.PROJID = old.PROJID
 			) AS TEXT
-		) [HISTORY],
+		) [ALL HISTORY],
 		PROJNAME, 
 		LOCATION, 
 		ANTADVDT, 
@@ -76,7 +86,13 @@ WITH -- cte is common table expression
 		CAST
 		(
 			(
-				
+				SELECT '(' || COUNT(PROJID) || ')   ' || GROUP_CONCAT( '[on ' || DATE || ' ' || 'the ANTADVDT changed to ' || ANTADVDT || '.]', '; ' )  
+				FROM cte6 WHERE cte6.PROJID = new.PROJID AND FIELD = 'ANTADVDT'
+			) AS TEXT
+		),
+		CAST
+		(
+			(
 				SELECT '(' || COUNT(PROJID) || ')   ' || GROUP_CONCAT( '[on ' || DATE || ' ' || IIF(FIELD = 'ANTADVDT', 'the ANTADVDT changed to ' || ANTADVDT || '.]', IIF(FIELD = 'ADDED', 'project was added.]', IIF(FIELD = '(DELETED)', 'the project was removed.]', FIELD || ' changed.]'))), '; ' )  
 				FROM cte6 WHERE cte6.PROJID = new.PROJID
 			) AS TEXT
@@ -101,7 +117,13 @@ WITH -- cte is common table expression
 		CAST
 		(
 			(
-				
+				SELECT '(' || COUNT(PROJID) || ')   ' || GROUP_CONCAT( '[on ' || DATE || ' ' || 'the ANTADVDT changed to ' || ANTADVDT || '.]', '; ' )  
+				FROM cte6 WHERE cte6.PROJID = c1.PROJID AND FIELD = 'ANTADVDT'
+			) AS TEXT
+		),
+		CAST
+		(
+			(
 				SELECT '(' || COUNT(PROJID) || ')   ' || GROUP_CONCAT( '[on ' || DATE || ' ' || IIF(FIELD = 'ANTADVDT', 'the ANTADVDT changed to ' || ANTADVDT || '.]', IIF(FIELD = 'ADDED', 'project was added.]', IIF(FIELD = '(DELETED)', 'the project was removed.]', FIELD || ' changed.]'))), '; ' )  
 				FROM cte6 WHERE cte6.PROJID = c1.PROJID
 			) AS TEXT

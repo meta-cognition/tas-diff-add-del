@@ -17,22 +17,22 @@ Set oSheet = oBook.ActiveSheet
 With oSheet.Columns("A")
     .ColumnWidth = 15
 End With
-With oSheet.Columns("B:E")
+With oSheet.Columns("B:F")
     .ColumnWidth = 15
-End With
-With oSheet.Columns("F")
-    .ColumnWidth = 65
 End With
 With oSheet.Columns("G")
-    .ColumnWidth = 23
+    .ColumnWidth = 65
 End With
 With oSheet.Columns("H")
+    .ColumnWidth = 23
+End With
+With oSheet.Columns("I")
     .ColumnWidth = 10
 End With
-With oSheet.Columns("I:M")
+With oSheet.Columns("J:N")
     .ColumnWidth = 15
 End With
-With oSheet.Columns("N")
+With oSheet.Columns("O")
     .ColumnWidth = 100
 End With
 With oSheet.Rows("1")

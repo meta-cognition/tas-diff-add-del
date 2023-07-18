@@ -12,4 +12,6 @@ convertback.vbs "%REPORTFILECSV%" "%REPORTFILEXLS%"
 del /f "%OLDFILECSV%"
 del /f "%NEWFILECSV%"
 del /f "%REPORTFILECSV%"
+
+
 :: del /f "tas-diff-add-del.db"
