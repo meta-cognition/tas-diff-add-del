@@ -1,7 +1,9 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+
+FileCopy, % A_ScriptDir "\tas-diff-add-del.db", % A_ScriptDir "\tas-diff-add-del.db." . A_Now . ".bak"
 
 FileSelectFile, old_file_xls, , % A_ScriptDir "\sources\", Select the OLD TAS report, Excel Files (*.xls; *.xlsx)
 if (old_file_xls = "")
